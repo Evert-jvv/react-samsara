@@ -26,6 +26,15 @@ export default [
     }
   },
   {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly"
+      }
+    }
+  },
+  {
     files: ["src/**/*.test.{ts,tsx}", "src/test/**/*.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off"

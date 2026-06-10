@@ -11,6 +11,7 @@
   ],
   "files": [
     "dist",
+    "docs",
     "LICENSE",
     "NOTICE.md",
     "README.md"
@@ -27,7 +28,10 @@
     "./styles.css": "./dist/styles.css"
   },
   "scripts": {
+    "audit": "./scripts/audit.sh",
     "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json && node scripts/copy-vendor.mjs",
+    "check:doc-links": "node scripts/check-doc-links.mjs",
+    "verify:independence": "node scripts/verify-independence.mjs",
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"

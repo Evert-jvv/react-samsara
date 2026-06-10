@@ -4,6 +4,7 @@ set -u
 mkdir -p .audit
 SUMMARY=".audit/summary.txt"
 LARGE_FILES=".audit/large-files.txt"
+FAILED=0
 : > "$SUMMARY"
 
 log() {
@@ -21,6 +22,7 @@ run_check() {
     log "$NAME: ok"
   else
     log "$NAME: failed ($STATUS)"
+    FAILED=1
   fi
 }
 
@@ -32,6 +34,7 @@ for FILE in README.md LICENSE NOTICE.md package.json src/index.ts vendor/samsara
     log "OK: $FILE"
   else
     log "MISSING: $FILE"
+    FAILED=1
   fi
 done
 
@@ -39,6 +42,8 @@ run_check "lint" "./scripts/lint.sh"
 run_check "typecheck" "./scripts/typecheck.sh"
 run_check "test" "./scripts/test.sh"
 run_check "build" "./scripts/build.sh"
+run_check "documentation link check" "npm run check:doc-links"
+run_check "package independence" "npm run verify:independence"
 
 if [ -f package.json ]; then
   if [ -f pnpm-lock.yaml ] && command -v pnpm >/dev/null 2>&1; then
@@ -72,3 +77,7 @@ log ""
 log "Large files saved to $LARGE_FILES"
 log "Audit summary saved to $SUMMARY"
 echo "Audit results saved to .audit/"
+
+if [ "$FAILED" -ne 0 ]; then
+  exit 1
+fi

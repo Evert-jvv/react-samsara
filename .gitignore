@@ -8,3 +8,5 @@ coverage/
 AGENTS.md
 docs/prd/
 skills/
+scripts/opensrc.sh
+scripts/ralphy.sh

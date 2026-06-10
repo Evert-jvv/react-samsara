@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["dist/**", "coverage/**", "node_modules/**", ".audit/**"]
+    ignores: ["dist/**", "coverage/**", "node_modules/**", ".audit/**", "vendor/**"]
   },
   {
     languageOptions: {

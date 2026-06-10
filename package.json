@@ -2,14 +2,17 @@
   "name": "react-samsarajs",
   "version": "0.1.0",
   "private": true,
-  "description": "Reusable React motion primitives extracted from the SamsaraJS prototype.",
+  "description": "React wrapper for SamsaraJS continuous UI primitives.",
   "type": "module",
   "sideEffects": [
     "./dist/styles.css",
-    "./src/styles/samsara.css"
+    "./dist/samsara.css",
+    "./dist/vendor/samsara.css"
   ],
   "files": [
     "dist",
+    "LICENSE",
+    "NOTICE.md",
     "README.md"
   ],
   "main": "./dist/index.js",
@@ -20,16 +23,18 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./samsara.css": "./dist/samsara.css",
     "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
+    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json && node scripts/copy-vendor.mjs",
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "react": ">=18.2.0 <20"
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

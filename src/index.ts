@@ -1,10 +1,19 @@
-export {
-  SamsaraDockingHeader,
-  type SamsaraDockingHeaderProps
-} from "./components/samsara-docking-header.js";
-export { SamsaraMagnetic, type SamsaraMagneticProps } from "./components/samsara-magnetic.js";
-export { SamsaraReveal, type SamsaraRevealProps } from "./components/samsara-reveal.js";
-export {
-  SamsaraScrollScene,
-  type SamsaraScrollSceneProps
-} from "./components/samsara-scroll-scene.js";
+export { loadSamsara } from "./load-samsara.js";
+export { SamsaraRoot, type SamsaraRootProps } from "./samsara-root.js";
+export { SamsaraSurface, type SamsaraSurfaceProps } from "./samsara-surface.js";
+export { useSamsara, useSamsaraContext } from "./react-context.js";
+export type {
+  SamsaraContext,
+  SamsaraContextOptions,
+  SamsaraLoadState,
+  SamsaraNamespace,
+  SamsaraReadyPayload,
+  SamsaraRenderTreeNode,
+  SamsaraSize,
+  SamsaraSurfaceInstance,
+  SamsaraSurfaceOptions,
+  SamsaraSurfaceReadyPayload,
+  SamsaraTransform,
+  SamsaraVector2,
+  SamsaraVector3
+} from "./types.js";

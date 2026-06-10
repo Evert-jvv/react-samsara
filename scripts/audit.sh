@@ -27,7 +27,7 @@ run_check() {
 log "react-samsarajs audit"
 log "Generated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-for FILE in README.md package.json src/index.ts; do
+for FILE in README.md LICENSE NOTICE.md package.json src/index.ts vendor/samsara/LICENSE; do
   if [ -f "$FILE" ]; then
     log "OK: $FILE"
   else

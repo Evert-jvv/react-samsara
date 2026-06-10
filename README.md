@@ -1,8 +1,8 @@
 # React SamsaraJS
 
-Reusable React motion primitives extracted from the SamsaraJS prototype. The package provides small client-side components for reveal motion, magnetic hover response, scroll-linked scene progress, and a docking header.
+React SamsaraJS is a React wrapper for the original [SamsaraJS](https://github.com/dmvaldman/samsara) continuous UI engine.
 
-This first package pass is intentionally private and demo-free. Publishing and a full example app are planned follow-up work.
+The package vendors `samsarajs@0.2.4` so React consumers can use Samsara contexts and surfaces without depending on a remote runtime package. Samsara itself remains browser-only, so this wrapper keeps package imports SSR-safe and loads the engine only in client effects or explicit browser calls.
 
 ## Install
 
@@ -10,90 +10,94 @@ This first package pass is intentionally private and demo-free. Publishing and a
 npm install react-samsarajs
 ```
 
-React is a peer dependency. The package targets React 18 and React 19.
+React and React DOM are peer dependencies. The package targets React 18 and React 19.
+
+## CSS
+
+Import the upstream Samsara CSS once in your app:
+
+```tsx
+import "react-samsarajs/samsara.css";
+```
+
+`react-samsarajs/styles.css` is kept as an alias for the same upstream stylesheet.
 
 ## Quick Start
 
-Import the components from the package entrypoint and the CSS from the public style export:
-
 ```tsx
-import {
-  SamsaraDockingHeader,
-  SamsaraMagnetic,
-  SamsaraReveal,
-  SamsaraScrollScene
-} from "react-samsarajs";
-import "react-samsarajs/styles.css";
+import { SamsaraRoot, SamsaraSurface } from "react-samsarajs";
+import "react-samsarajs/samsara.css";
 
 export function Example() {
   return (
-    <>
-      <SamsaraDockingHeader>
-        <strong>Project</strong>
-        <nav>Navigation</nav>
-      </SamsaraDockingHeader>
-
-      <SamsaraReveal as="section" delay={120}>
-        <h1>Reveal on entry</h1>
-      </SamsaraReveal>
-
-      <SamsaraMagnetic as="a" href="/start" intensity={0.8}>
-        <span>Magnetic link</span>
-      </SamsaraMagnetic>
-
-      <SamsaraScrollScene>
-        <div>Scroll-linked scene content</div>
-      </SamsaraScrollScene>
-    </>
+    <SamsaraRoot style={{ height: 320 }}>
+      <SamsaraSurface
+        size={[160, 80]}
+        origin={[0.5, 0.5]}
+        properties={{ background: "#111827", color: "white", borderRadius: "12px" }}
+      >
+        <strong>Hello Samsara</strong>
+      </SamsaraSurface>
+    </SamsaraRoot>
   );
 }
 ```
 
-## Components
+## API
 
-### `SamsaraMagnetic`
+### `loadSamsara()`
 
-Adds pointer-responsive tilt, translation, glare variables, and optional reveal motion.
+Loads the vendored SamsaraJS browser bundle and resolves to the upstream namespace:
 
-Props: `as`, `children`, `className`, `delay`, `href`, `intensity`, `reveal`, `style`.
-
-### `SamsaraReveal`
-
-Reveals content when it intersects the viewport.
-
-Props: `as`, `children`, `className`, `delay`, `style`.
-
-### `SamsaraScrollScene`
-
-Writes scroll progress variables to its root element for scene transforms and dependent styling.
-
-Props: `children`, `className`.
-
-### `SamsaraDockingHeader`
-
-Animates a fixed header between floating and docked states as the page scrolls. It always includes the `samsara-docking-header` class and also accepts `className` for app styling.
-
-Props: `children`, `className`.
-
-## Styling
-
-The package stylesheet defines reusable `.samsara-*` classes and CSS custom properties. App-specific colors can be customized with variables such as:
-
-```css
-:root {
-  --samsara-header-bg-rgb: 15, 23, 42;
-  --samsara-header-border: rgba(255, 255, 255, 0.14);
-  --samsara-header-accent-rgb: 251, 191, 36;
-}
+```ts
+const Samsara = await loadSamsara();
+const surface = new Samsara.DOM.Surface({ size: [100, 100] });
 ```
 
-The extracted CSS avoids portfolio-specific layout, copy, and theme globals from the original prototype.
+The function rejects outside a browser environment. It does not run during package import.
 
-## SSR And Accessibility
+### `SamsaraRoot`
 
-Browser-only APIs are accessed inside React effects, so importing the package during server rendering should not touch `window`, `document`, observers, or animation APIs.
+Renders a host element, loads SamsaraJS on the client, creates a `Samsara.DOM.Context`, mounts it to the host, and provides the context to child components.
 
-The components respect `prefers-reduced-motion: reduce` by writing resting state CSS variables instead of requiring long-running animation. Consumers should keep children semantic and keyboard-accessible, especially when using `SamsaraMagnetic` with interactive content.
+Useful props:
+
+- `as`
+- `contextOptions`
+- `onReady`
+- `onError`
+- standard host element props such as `className` and `style`
+
+### `SamsaraSurface`
+
+Creates a real `Samsara.DOM.Surface`, adds it to the nearest `SamsaraRoot`, updates supported options, bridges common DOM events, and portals React children into the deployed surface element.
+
+Supported v1 props:
+
+- `as` / `tagName`
+- `content`
+- `children`
+- `size`
+- `classes`
+- `properties`
+- `attributes`
+- `opacity`
+- `origin`
+- `margins`
+- `proportions`
+- `enableScroll`
+- `onReady`
+- common handlers such as `onClick`, `onMouseMove`, and touch events
+
+### Hooks
+
+`useSamsara()` returns `{ loading, error, samsara, context }`.
+
+`useSamsaraContext()` returns the nearest mounted Samsara context, or `null` while loading.
+
+## Vendored Upstream
+
+This package vendors `samsarajs@0.2.4` from `dmvaldman/samsara`. See `NOTICE.md` and `vendor/samsara/LICENSE` for attribution and license details.
 
 ## Development
 

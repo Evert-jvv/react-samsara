@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.audit/
+.codex/
+.lp88/
+.ralphy/
+AGENTS.md
+docs/prd/
+skills/
